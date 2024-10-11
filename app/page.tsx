@@ -42,6 +42,8 @@ export default function Home() {
   const [selectedAttorneys, setSelectedAttorneys] = useState<string[]>([]); // State for selected attorneys
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null); // State for selected status
   const [viewType, setViewType] = useState<"grid" | "list">("list"); // Default to list view
+  const [isFilterVisible, setIsFilterVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [activeTab, setActiveTab] = useState<
     "owners" | "lawFirms" | "attorneys"
@@ -69,7 +71,7 @@ export default function Home() {
   });
 
   const statuses = [
-    { label: "All", value: null, background: "bg-white" }, // Represents no specific status
+    { label: "All", value: null, background: "bg-white" }, 
     { label: "Registered", value: "registered", background: "bg-success" },
     { label: "Pending", value: "pending", background: "bg-warning" },
     { label: "Abandoned", value: "abandoned", background: "bg-danger" },
@@ -81,11 +83,11 @@ export default function Home() {
   };
 
   function formatDate(dateString: number) {
-    const date = new Date(dateString * 1000); // Converting timestamp (in seconds) to milliseconds
+    const date = new Date(dateString * 1000); 
     const day = date.getDate();
 
     const daySuffix = (day: number) => {
-      if (day > 3 && day < 21) return "th"; // Covers 11th - 20th
+      if (day > 3 && day < 21) return "th";
       switch (day % 10) {
         case 1:
           return "st";
@@ -236,6 +238,8 @@ export default function Home() {
       }
     });
   };
+  console.log(selectedAttorneys.length);
+  
 
   const handleStatusChange = (status: string | null) => {
     if (selectedStatus === status) {
@@ -254,52 +258,58 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    // If no filters are selected, we can refetch the data
     if (
-      selectedOwners.length > 0 ||
-      selectedStatus ||
-      selectedLawFirms.length > 0 ||
-      selectedAttorneys.length > 0
+      selectedOwners.length === 0 &&
+      !selectedStatus &&
+      selectedLawFirms.length === 0 &&
+      selectedAttorneys.length === 0
     ) {
-      const filteredTrademarks = trademarks.filter((trademark) => {
-        const ownerMatch =
-          selectedOwners.length === 0 ||
-          selectedOwners.includes(trademark.owner);
-        const statusMatch = selectedStatus
-          ? trademark.status === selectedStatus
-          : true;
-        console.log(statusMatch);
-
-        // Determine filtering based on the active tab
-        const lawFirmMatch =
-          activeTab === "lawFirms"
-            ? selectedLawFirms.length === 0 ||
-              selectedLawFirms.includes(trademark.lawFirms)
-            : true;
-        const attorneyMatch =
-          activeTab === "attorneys"
-            ? selectedAttorneys.length === 0 ||
-              selectedAttorneys.includes(trademark.attorneys)
-            : true;
-
-        return (
-          ownerMatch &&
-          statusMatch &&
-          (activeTab === "owners" ? true : lawFirmMatch || attorneyMatch)
-        );
-      });
-
-      setTrademarks(filteredTrademarks);
-      console.log(trademarks);
-    } else {
       handleSearch(); // Re-fetch if no filters are selected
+      return; // Exit the useEffect early
     }
+  
+    // Start with the full list of trademarks
+    let filteredTrademarks = trademarks;
+  
+    // Filter by owners if any are selected
+    if (selectedOwners.length > 0) {
+      filteredTrademarks = filteredTrademarks.filter((trademark) =>
+        selectedOwners.includes(trademark.owner)
+      );
+    }
+  
+    // Filter by status if one is selected
+    if (selectedStatus) {
+      filteredTrademarks = filteredTrademarks.filter(
+        (trademark) => trademark.status === selectedStatus
+      );
+    }
+  
+    // Filter by law firms if any are selected
+    if (selectedLawFirms.length > 0) {
+      filteredTrademarks = filteredTrademarks.filter((trademark) =>
+        selectedLawFirms.includes(trademark.lawFirms)
+      );
+    }
+  
+    // Filter by attorneys if any are selected
+    if (selectedAttorneys.length > 0) {
+      filteredTrademarks = filteredTrademarks.filter((trademark) =>
+        selectedAttorneys.includes(trademark.attorneys)
+      );
+    }
+  
+    // Update the trademarks state with the filtered results
+    setTrademarks(filteredTrademarks);
   }, [
     selectedOwners,
     selectedStatus,
     selectedLawFirms,
     selectedAttorneys,
-    activeTab,
   ]);
+  
+  
 
   const handleShare = () => {
     const subject = "Shared Trademarks";
@@ -327,7 +337,7 @@ export default function Home() {
           <img
             height={200}
             width={200}
-            // src="https://s3-alpha-sig.figma.com/img/29e3/a292/59a6875d50b71e2c1320ab20e9a4c855?Expires=1729468800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=WAoNr9xVG4h-TXEoC0tRFTZsTMW3L32Q2o-Jao1jDFHJ74Fap9NyqYRYL-OzOAZfUn-1oD5YKVX5gqcha~DOloBCXO4fwrNXynhfgHNJb8rzvP1pW9~JdgDxqQAa~e4HRXcGb6KhP2dLu4~NYsHVmlkMbhZLtr3yQGWeGFze-zHqAofth35x3RoOtAPyAWp13fd~lG-QH~k7UO2u1rdlW33X94HJlJo5cY1ibBzYjCIUu09W72KauNIJdic0-Cg5WmVFouEUASgsJbeiha6X-Vi4ZXOipSRY1GeAPZf99yderwDN9pZK2C4ZokbktEjItfvqGtDWGFW-hWjkO35t9g__"
+            src="https://s3-alpha-sig.figma.com/img/29e3/a292/59a6875d50b71e2c1320ab20e9a4c855?Expires=1729468800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=WAoNr9xVG4h-TXEoC0tRFTZsTMW3L32Q2o-Jao1jDFHJ74Fap9NyqYRYL-OzOAZfUn-1oD5YKVX5gqcha~DOloBCXO4fwrNXynhfgHNJb8rzvP1pW9~JdgDxqQAa~e4HRXcGb6KhP2dLu4~NYsHVmlkMbhZLtr3yQGWeGFze-zHqAofth35x3RoOtAPyAWp13fd~lG-QH~k7UO2u1rdlW33X94HJlJo5cY1ibBzYjCIUu09W72KauNIJdic0-Cg5WmVFouEUASgsJbeiha6X-Vi4ZXOipSRY1GeAPZf99yderwDN9pZK2C4ZokbktEjItfvqGtDWGFW-hWjkO35t9g__"
             alt="Trademarkia logo"
           />
         </div>
@@ -394,18 +404,14 @@ export default function Home() {
                       key={trademark.id}
                       className="bg-white p-4 shadow rounded-md"
                     >
+                      <div className="flex justify-between">
+
                       <img
                         src={imageNotAvailable.src}
                         className="w-16 h-16"
                         alt="image not available"
                       />
-                      <div className="text-sm text-black font-bold">
-                        {trademark.mark_identification}
-                      </div>
-                      <div className="text-sm text-gray-500">
-                        {trademark.owner}
-                      </div>
-                      <div className="flex flex-col mt-2">
+                       <div className="flex flex-col mt-2">
                         <span className="inline-flex text-md font-semibold rounded-full text-success">
                           {trademark.status.charAt(0).toUpperCase() +
                             trademark.status.slice(1)}
@@ -416,7 +422,22 @@ export default function Home() {
                           </span>{" "}
                           {trademark.date}
                         </span>
-                        <div className="flex items-center gap-1 mt-1">
+                      
+                      </div>
+                      </div>
+                      <div className="flex justify-between items-center">
+                    
+                    <div>
+
+                      <div className="text-sm text-black font-bold">
+                        {trademark.mark_identification}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        {trademark.owner}
+                      </div>
+                        
+                    </div>
+                    <div className="flex items-center gap-1 mt-1">
                           <img
                             src={Refresh.src}
                             className="w-4 h-4"
@@ -427,6 +448,8 @@ export default function Home() {
                           </span>
                         </div>
                       </div>
+                      
+                     
                       <div className="text-sm text-gray-500 mt-2">
                         {trademark.description.length > 50
                           ? trademark.description.slice(0, 50) + "..."
@@ -445,7 +468,7 @@ export default function Home() {
         {/* Filters Sidebar */}
         <aside className="col-span-3 p-6 rounded-lg font-myCustomFont mt-10">
           <div className="flex justify-center gap-6 p-1 items-center mb-6">
-            <button className="flex items-center gap-2 px-4 py-3 bg-white border border-gray-300 rounded-md">
+            <button onClick={() => setIsFilterVisible((prev) => !prev)}  className="flex items-center gap-2 px-4 py-3 bg-white border border-gray-300 rounded-md">
               <img src={filter_alt.src} className="w-4 h-4" alt="filter" />
               <span className="inline-block text-xs">Filter</span>
             </button>
@@ -461,6 +484,7 @@ export default function Home() {
           </div>
 
           {/* Status Filter */}
+          {isFilterVisible && (
           <div className="mb-6 bg-white p-6 shadow-lg rounded-md">
             <h3 className="text-sm font-medium mb-4">Status</h3>
             <div className="flex flex-wrap gap-2">
@@ -474,16 +498,17 @@ export default function Home() {
                   }`}
                   onClick={() => handleStatusChange(status.value)}
                 >
-                  <div
+                 {status.label != 'All' ? <div
                     className={`w-2 h-2 rounded-full ${status.background}`}
-                  ></div>
+                  ></div> : null}
                   {status.label}
                 </button>
               ))}
             </div>
           </div>
-
+          )}
           {/* Dynamic Checkbox Filters Based on Active Tab */}
+          {isFilterVisible && (
           <div className="mb-6 bg-white p-6 shadow-lg rounded-md">
             <div className="flex justify-between mb-6">
               <button
@@ -522,11 +547,15 @@ export default function Home() {
               placeholder={`Search ${
                 activeTab.charAt(0).toUpperCase() + activeTab.slice(1)
               }`}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)} // Update search query
               className="w-full px-4 py-2 border border-gray-300 rounded-md mb-4"
             />
             <div className="space-y-2">
               {activeTab === "owners" &&
-                owners.map((own) => (
+                owners
+                .filter((own) => own.owner.toLowerCase().includes(searchQuery.toLowerCase())) // Filter by search query
+                .map((own) => (
                   <div key={own.owner} className="flex items-center">
                     <input
                       type="checkbox"
@@ -544,7 +573,9 @@ export default function Home() {
                 ))}
 
               {activeTab === "lawFirms" &&
-                lawFirms.map((firm) => (
+                lawFirms
+                .filter((firm) => firm.lawFirms.toLowerCase().includes(searchQuery.toLowerCase())) // Filter by search query
+                .map((firm) => (
                   <div key={firm.lawFirms} className="flex items-center">
                     <input
                       type="checkbox"
@@ -562,7 +593,9 @@ export default function Home() {
                 ))}
 
               {activeTab === "attorneys" &&
-                attorneys.map((at) => (
+                attorneys
+                .filter((at) => at.attorneys.toLowerCase().includes(searchQuery.toLowerCase())) // Filter by search query
+                .map((at) => (
                   <div key={at.attorneys} className="flex items-center">
                     <input
                       type="checkbox"
@@ -580,8 +613,9 @@ export default function Home() {
                 ))}
             </div>
           </div>
-
+          )}
           {/* Display Options */}
+          {isFilterVisible && (
           <div className="bg-white p-6 shadow-lg rounded-md">
             <h3 className="text-sm font-medium mb-4">Display</h3>
             <div className="flex space-x-2">
@@ -603,6 +637,7 @@ export default function Home() {
               </button>
             </div>
           </div>
+          )}
         </aside>
       </div>
     </div>
