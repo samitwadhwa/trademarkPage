@@ -71,7 +71,7 @@ export default function Home() {
   });
 
   const statuses = [
-    { label: "All", value: null, background: "bg-white" }, 
+    { label: "All", value: null, background: "bg-white" },
     { label: "Registered", value: "registered", background: "bg-success" },
     { label: "Pending", value: "pending", background: "bg-warning" },
     { label: "Abandoned", value: "abandoned", background: "bg-danger" },
@@ -83,7 +83,7 @@ export default function Home() {
   };
 
   function formatDate(dateString: number) {
-    const date = new Date(dateString * 1000); 
+    const date = new Date(dateString * 1000);
     const day = date.getDate();
 
     const daySuffix = (day: number) => {
@@ -118,8 +118,6 @@ export default function Home() {
       return; // Exit the function early
     }
     try {
-    
-
       const response = await axios.post(apiUrl, {
         input_query: filters.input_query || "",
         input_query_type: filters.input_query_type || "",
@@ -239,7 +237,6 @@ export default function Home() {
     });
   };
   console.log(selectedAttorneys.length);
-  
 
   const handleStatusChange = (status: string | null) => {
     if (selectedStatus === status) {
@@ -268,48 +265,41 @@ export default function Home() {
       handleSearch(); // Re-fetch if no filters are selected
       return; // Exit the useEffect early
     }
-  
+
     // Start with the full list of trademarks
     let filteredTrademarks = trademarks;
-  
+
     // Filter by owners if any are selected
     if (selectedOwners.length > 0) {
       filteredTrademarks = filteredTrademarks.filter((trademark) =>
         selectedOwners.includes(trademark.owner)
       );
     }
-  
+
     // Filter by status if one is selected
     if (selectedStatus) {
       filteredTrademarks = filteredTrademarks.filter(
         (trademark) => trademark.status === selectedStatus
       );
     }
-  
+
     // Filter by law firms if any are selected
     if (selectedLawFirms.length > 0) {
       filteredTrademarks = filteredTrademarks.filter((trademark) =>
         selectedLawFirms.includes(trademark.lawFirms)
       );
     }
-  
+
     // Filter by attorneys if any are selected
     if (selectedAttorneys.length > 0) {
       filteredTrademarks = filteredTrademarks.filter((trademark) =>
         selectedAttorneys.includes(trademark.attorneys)
       );
     }
-  
+
     // Update the trademarks state with the filtered results
     setTrademarks(filteredTrademarks);
-  }, [
-    selectedOwners,
-    selectedStatus,
-    selectedLawFirms,
-    selectedAttorneys,
-  ]);
-  
-  
+  }, [selectedOwners, selectedStatus, selectedLawFirms, selectedAttorneys]);
 
   const handleShare = () => {
     const subject = "Shared Trademarks";
@@ -330,9 +320,10 @@ export default function Home() {
   };
 
   return (
-    <div className="container mx-auto bg-white font-myCustomFont">
+    <div className="container mx-auto bg-white  overflow-hidden">
       {/* Search Section */}
-      <div className="flex justify-start gap-8 p-8 items-center bg-lightening">
+      <div className="flex flex-col items-start gap-8 p-8 bg-lightening md:flex-row md:justify-start overflow-hidden">
+        {/* Logo/Image Section */}
         <div className="p-2">
           <img
             height={200}
@@ -341,45 +332,81 @@ export default function Home() {
             alt="Trademarkia logo"
           />
         </div>
-        <div className="flex items-center space-x-4 relative">
-          <img
-            src={search.src}
-            className="w-6 h-6 absolute left-7"
-            alt="search icon"
-          />
-          <input
-            type="text"
-            name="input_query"
-            placeholder="Search Trademark Here eg. Nike"
-            value={filters.input_query}
-            onChange={handleInputChange}
-            className="px-10 py-3 border text-start font-myCustomFont border-gray-300 rounded-lg w-full md:w-96"
-          />
+
+        {/* Search Input Section */}
+        <div className="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-2 relative w-full">
+          <div className="relative w-full md:w-auto">
+            {/* Search Icon */}
+            <img
+              src={search.src}
+              className="w-6 h-6 absolute top-3 left-3 md:left-3 md:top-1/2 md:transform md:-translate-y-1/2"
+              alt="search icon"
+            />
+            <input
+              type="text"
+              name="input_query"
+              placeholder="Search Trademark Here eg. Nike"
+              value={filters.input_query}
+              onChange={handleInputChange}
+              className="pl-10 py-3 border  border-gray-300 rounded-lg w-full md:w-96 transition duration-300 ease-in-out focus:ring focus:ring-blue-500"
+            />
+          </div>
           <button
             onClick={handleSearch}
-            className="px-8 py-3 font-myCustomFont bg-primary text-white rounded-lg hover:bg-blue-700"
+            className="px-8 py-3  bg-primary text-white rounded-lg hover:bg-blue-700 md:w-auto hover:scale-105 transform transition duration-300"
           >
             Search
           </button>
         </div>
       </div>
+
       <hr className="border-4 hpx w-full border-[#EAF1FF]" />
 
       <div className="grid grid-cols-12 gap-6 p-8">
         {/* Search Results Section */}
-        <main className="col-span-9 bg-white p-6 rounded-md">
+        <main className="col-span-9 bg-white p-6 rounded-md ">
           {loading ? (
-            <p>Loading...</p>
+           <div
+           className="w-12 h-12 border-4 border-white rounded-full inline-block box-border animate-spin"
+           style={{ borderBottomColor: '#4380EC' }}
+         ></div>
           ) : (
             <div>
-              <p className="mb-4 text-[#4B5563] font-myCustomFont font-bold">
-                About {trademarks.length} Trademarks found for “
-                {filters.input_query}”
-              </p>
+              <div className="flex lg:justify-start justify-around  w-[150%]">
+                <div>
+                  <p className="mb-4 text-[#4B5563]  font-bold">
+                    About {trademarks.length} Trademarks found for “
+                    {filters.input_query}”
+                  </p>
+                </div>
+                {/* Filter Button for Small Screens */}
+                <div className="flex justify-end gap-6 p-1 items-center mb-6 lg:hidden">
+                  <button
+                    onClick={() => setIsFilterVisible((prev) => !prev)}
+                    className="flex items-center gap-2 px-4 py-3 bg-white border border-gray-300 rounded-md"
+                  >
+                    <img
+                      src={filter_alt.src}
+                      className="w-4 h-4"
+                      alt="filter"
+                    />
+                    <span className="inline-block text-xs w-12">Filter</span>
+                  </button>
+                  {/* <button
+                  className="px-2 py-2 border border-gray-300 bg-white rounded-full"
+                  onClick={handleShare}
+                >
+                  <img src={share.src} className="w-4 h-4" alt="share" />
+                </button>
+                <button className="px-2 py-2 border border-gray-300 bg-white rounded-full">
+                  <img src={sort.src} className="w-4 h-4" alt="sort" />
+                </button> */}
+                </div>
+              </div>
               <hr className="border-2 hpx w-full border-[#E7E6E6]" />
-
+              <div></div>
               <div className="flex gap-4 items-center">
-                <p className="mt-6 mb-6 text-[#4B5563] font-myCustomFont font-bold">
+                <p className="mt-6 mb-6 text-[#4B5563]  font-bold">
                   Also try searching for
                 </p>
                 <div className="flex gap-4">
@@ -387,7 +414,7 @@ export default function Home() {
                     (suggestion, index) => (
                       <button
                         key={index}
-                        className="border-2 border-[#F97316] text-[#F97316] py-2 px-4 rounded-full font-myCustomFont bg-[#FFF8F1] hover:bg-[#FFE0B3]"
+                        className="border-2 border-[#F97316] text-[#F97316] py-2 px-4 rounded-md  bg-[#FFF8F1] hover:bg-[#FFE0B3]"
                         onClick={() => handleSearchSuggestion(suggestion)}
                       >
                         {suggestion}
@@ -397,247 +424,268 @@ export default function Home() {
                 </div>
               </div>
 
-              {viewType === "grid" ? (
+              {viewType === "grid" || window.innerWidth < 768 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {trademarks.map((trademark) => (
-                    <div
-                      key={trademark.id}
-                      className="bg-white p-4 shadow rounded-md"
-                    >
-                      <div className="flex justify-between">
-
+                {trademarks.map((trademark) => (
+                  <div
+                    key={trademark.id}
+                    className="bg-white p-4 shadow rounded-md w-full sm:max-w-xs lg:w-full mx-auto lg:mx-0  hover:shadow-lg transition-transform transform hover:scale-105 duration-300"
+                  >
+                    <div className="flex justify-between items-center">
                       <img
                         src={imageNotAvailable.src}
-                        className="w-16 h-16"
+                        className="w-16 h-16 object-contain"
                         alt="image not available"
                       />
-                       <div className="flex flex-col mt-2">
+                      <div className="flex flex-col text-right">
                         <span className="inline-flex text-md font-semibold rounded-full text-success">
-                          {trademark.status.charAt(0).toUpperCase() +
-                            trademark.status.slice(1)}
+                          {trademark.status.charAt(0).toUpperCase() + trademark.status.slice(1)}
                         </span>
                         <span className="text-xs text-black font-bold">
-                          <span className="text-xs text-gray-500 font-medium">
-                            on
-                          </span>{" "}
-                          {trademark.date}
+                          <span className="text-xs text-gray-500 font-medium">on</span> {trademark.date}
                         </span>
-                      
                       </div>
-                      </div>
-                      <div className="flex justify-between items-center">
-                    
-                    <div>
-
-                      <div className="text-sm text-black font-bold">
-                        {trademark.mark_identification}
-                      </div>
-                      <div className="text-sm text-gray-500">
-                        {trademark.owner}
-                      </div>
-                        
                     </div>
-                    <div className="flex items-center gap-1 mt-1">
-                          <img
-                            src={Refresh.src}
-                            className="w-4 h-4"
-                            alt="refresh"
-                          />
-                          <span className="text-xs text-black font-bold">
-                            {trademark.renewal_date}
-                          </span>
+                    <div className="flex justify-between items-center mt-3">
+                      <div>
+                        <div className="text-sm text-black font-bold">
+                          {trademark.mark_identification}
                         </div>
+                        <div className="text-sm text-gray-500">{trademark.owner}</div>
                       </div>
-                      
-                     
-                      <div className="text-sm text-gray-500 mt-2">
-                        {trademark.description.length > 50
-                          ? trademark.description.slice(0, 50) + "..."
-                          : trademark.description}
+                      <div className="flex items-center gap-1">
+                        <img src={Refresh.src} className="cursor-pointer w-4 h-4" alt="refresh" />
+                        <span className="text-xs text-black font-bold">{trademark.renewal_date}</span>
                       </div>
                     </div>
-                  ))}
-                </div>
+              
+                    <div className="text-sm text-gray-500 mt-2">
+                      {trademark.description.length > 50
+                        ? trademark.description.slice(0, 50) + "..."
+                        : trademark.description}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              
+              
               ) : (
-                <TrademarkList trademarks={trademarks} />
+                <div className="hidden md:block">
+                  <TrademarkList trademarks={trademarks} />
+                </div>
               )}
+
               {/* // table component  */}
             </div>
           )}
         </main>
         {/* Filters Sidebar */}
-        <aside className="col-span-3 p-6 rounded-lg font-myCustomFont mt-10">
+        <aside
+          className={`${
+            isFilterVisible ? "block" : "hidden"
+          } fixed top-0 overflow-y-auto right-0 w-full h-full lg: max-w-xs bg-white p-6 rounded-lg shadow-lg z-50 lg:block lg:static lg:w-auto lg:col-span-3 lg:mt-6 lg:p-6`}
+        >
+          {/* Close Button for Small Screens */}
+          <div className="flex justify-between mb-6 lg:hidden">
+            <span className="font-semibold text-lg">Filter</span>
+            <button
+              onClick={() => setIsFilterVisible(false)}
+              className="text-gray-500 hover:text-gray-900"
+            >
+              ✖
+            </button>
+          </div>
+
+          {/* Filter Buttons */}
           <div className="flex justify-center gap-6 p-1 items-center mb-6">
-            <button onClick={() => setIsFilterVisible((prev) => !prev)}  className="flex items-center gap-2 px-4 py-3 bg-white border border-gray-300 rounded-md">
+            {/* <button
+              // onClick={() => setIsFilterVisible((prev) => !prev)}
+              className="flex items-center gap-2 px-4 py-3 bg-white border border-gray-300 rounded-md"
+            >
               <img src={filter_alt.src} className="w-4 h-4" alt="filter" />
               <span className="inline-block text-xs">Filter</span>
-            </button>
+            </button> */}
             <button
-              className="px-2 py-2 border border-gray-300 bg-white rounded-full "
+              className="px-2 py-2 border border-gray-300 bg-white rounded-full hover:scale-105 transform transition duration-300"
               onClick={handleShare}
             >
-              <img src={share.src} className="w-4 h-4" alt="share" />
+              <img src={share.src} className="w-6 h-6" alt="share" />
             </button>
-            <button className="px-2 py-2 border border-gray-300 bg-white rounded-full">
-              <img src={sort.src} className="w-4 h-4" alt="sort" />
+            <button className="px-2 py-2 border border-gray-300 bg-white rounded-full hover:scale-105 transform transition duration-300">
+              <img src={sort.src} className="w-6 h-6" alt="sort" />
             </button>
           </div>
 
           {/* Status Filter */}
-          {isFilterVisible && (
-          <div className="mb-6 bg-white p-6 shadow-lg rounded-md">
-            <h3 className="text-sm font-medium mb-4">Status</h3>
-            <div className="flex flex-wrap gap-2">
-              {statuses.map((status) => (
-                <button
-                  key={status.value}
-                  className={`flex items-center gap-1 border border-1 border-[#D1D1D1] text-sm px-3 py-1 rounded-full ${
-                    selectedStatus === status.value
-                      ? "bg-blue-500 text-white"
-                      : "text-black"
-                  }`}
-                  onClick={() => handleStatusChange(status.value)}
-                >
-                 {status.label != 'All' ? <div
-                    className={`w-2 h-2 rounded-full ${status.background}`}
-                  ></div> : null}
-                  {status.label}
-                </button>
-              ))}
+        
+            <div className="mb-6 bg-white p-6 shadow-lg rounded-md">
+              <h3 className="text-sm font-medium mb-4">Status</h3>
+              <div className="flex flex-wrap gap-2">
+                {statuses.map((status) => (
+                  <button
+                    key={status.value}
+                    className={`flex items-center gap-1 hover:bg-blue-500 hover:text-white transition-colors duration-300 border border-1 border-[#D1D1D1] text-sm px-3 py-1 rounded-full ${
+                      selectedStatus === status.value
+                        ? "bg-blue-500 text-white"
+                        : "text-black"
+                    }`}
+                    onClick={() => handleStatusChange(status.value)}
+                  >
+                    {status.label !== "All" ? (
+                      <div
+                        className={`w-2 h-2 rounded-full ${status.background}`}
+                      ></div>
+                    ) : null}
+                    {status.label}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
-          )}
+        
+
           {/* Dynamic Checkbox Filters Based on Active Tab */}
-          {isFilterVisible && (
-          <div className="mb-6 bg-white p-6 shadow-lg rounded-md">
-            <div className="flex justify-between mb-6">
-              <button
-                onClick={() => handleTabChange("owners")}
-                className={`font-myCustomFont py-2 px-2 rounded-md ${
-                  activeTab === "owners"
-                    ? "bg-blue-500 text-white"
-                    : "bg-white text-black"
+      
+            <div className="mb-6 bg-white p-6 shadow-lg rounded-md">
+              <div className="flex justify-between mb-6">
+                <button
+                  onClick={() => handleTabChange("owners")}
+                  className={` rounded-md ${
+                    activeTab === "owners"
+                      ? "bg-primary text-white p-2"
+                      : "bg-white text-black"
+                  }`}
+                >
+                  Owners
+                </button>
+                <button
+                  onClick={() => handleTabChange("lawFirms")}
+                  className={` rounded-md ${
+                    activeTab === "lawFirms"
+                      ? "bg-primary text-white p-2"
+                      : "bg-white text-black"
+                  }`}
+                >
+                  Law Firms
+                </button>
+                <button
+                  onClick={() => handleTabChange("attorneys")}
+                  className={` rounded-md ${
+                    activeTab === "attorneys"
+                      ? "bg-primary text-white p-2"
+                      : "bg-white text-black"
+                  }`}
+                >
+                  Attorneys
+                </button>
+              </div>
+              <input
+                type="text"
+                placeholder={`Search ${
+                  activeTab.charAt(0).toUpperCase() + activeTab.slice(1)
                 }`}
-              >
-                Owners
-              </button>
-              <button
-                onClick={() => handleTabChange("lawFirms")}
-                className={`font-myCustomFont  py-2 px-2 rounded-md ${
-                  activeTab === "lawFirms"
-                    ? "bg-blue-500 text-white"
-                    : "bg-white text-black"
-                }`}
-              >
-                Law Firms
-              </button>
-              <button
-                onClick={() => handleTabChange("attorneys")}
-                className={`font-myCustomFont  py-2 px-2 rounded-md ${
-                  activeTab === "attorneys"
-                    ? "bg-blue-500 text-white"
-                    : "bg-white text-black"
-                }`}
-              >
-                Attorneys
-              </button>
-            </div>
-            <input
-              type="text"
-              placeholder={`Search ${
-                activeTab.charAt(0).toUpperCase() + activeTab.slice(1)
-              }`}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)} // Update search query
-              className="w-full px-4 py-2 border border-gray-300 rounded-md mb-4"
-            />
-            <div className="space-y-2">
-              {activeTab === "owners" &&
-                owners
-                .filter((own) => own.owner.toLowerCase().includes(searchQuery.toLowerCase())) // Filter by search query
-                .map((own) => (
-                  <div key={own.owner} className="flex items-center">
-                    <input
-                      type="checkbox"
-                      id={own.owner}
-                      name="owner"
-                      value={own.owner}
-                      className="mr-2"
-                      checked={selectedOwners.includes(own.owner)}
-                      onChange={() => handleOwnerChange(own.owner)}
-                    />
-                    <label htmlFor={own.owner} className="text-sm">
-                      {own.owner}
-                    </label>
-                  </div>
-                ))}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-md mb-4"
+              />
+              <div className="space-y-2">
+                {activeTab === "owners" &&
+                  owners
+                    .filter((own) =>
+                      own.owner
+                        .toLowerCase()
+                        .includes(searchQuery.toLowerCase())
+                    )
+                    .map((own) => (
+                      <div key={own.owner} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id={own.owner}
+                          name="owner"
+                          value={own.owner}
+                          className="mr-2"
+                          checked={selectedOwners.includes(own.owner)}
+                          onChange={() => handleOwnerChange(own.owner)}
+                        />
+                        <label htmlFor={own.owner} className="text-sm">
+                          {own.owner}
+                        </label>
+                      </div>
+                    ))}
 
-              {activeTab === "lawFirms" &&
-                lawFirms
-                .filter((firm) => firm.lawFirms.toLowerCase().includes(searchQuery.toLowerCase())) // Filter by search query
-                .map((firm) => (
-                  <div key={firm.lawFirms} className="flex items-center">
-                    <input
-                      type="checkbox"
-                      id={firm.lawFirms}
-                      name="lawFirm"
-                      value={firm.lawFirms}
-                      className="mr-2"
-                      checked={selectedLawFirms.includes(firm.lawFirms)}
-                      onChange={() => handleLawFirmChange(firm.lawFirms)}
-                    />
-                    <label htmlFor={firm.lawFirms} className="text-sm">
-                      {firm.lawFirms}
-                    </label>
-                  </div>
-                ))}
+                {activeTab === "lawFirms" &&
+                  lawFirms
+                    .filter((firm) =>
+                      firm.lawFirms
+                        .toLowerCase()
+                        .includes(searchQuery.toLowerCase())
+                    )
+                    .map((firm) => (
+                      <div key={firm.lawFirms} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id={firm.lawFirms}
+                          name="lawFirm"
+                          value={firm.lawFirms}
+                          className="mr-2"
+                          checked={selectedLawFirms.includes(firm.lawFirms)}
+                          onChange={() => handleLawFirmChange(firm.lawFirms)}
+                        />
+                        <label htmlFor={firm.lawFirms} className="text-sm">
+                          {firm.lawFirms}
+                        </label>
+                      </div>
+                    ))}
 
-              {activeTab === "attorneys" &&
-                attorneys
-                .filter((at) => at.attorneys.toLowerCase().includes(searchQuery.toLowerCase())) // Filter by search query
-                .map((at) => (
-                  <div key={at.attorneys} className="flex items-center">
-                    <input
-                      type="checkbox"
-                      id={at.attorneys}
-                      name="attorney"
-                      value={at.attorneys}
-                      className="mr-2"
-                      checked={selectedAttorneys.includes(at.attorneys)}
-                      onChange={() => handleAttorneyChange(at.attorneys)}
-                    />
-                    <label htmlFor={at.attorneys} className="text-sm">
-                      {at.attorneys}
-                    </label>
-                  </div>
-                ))}
+                {activeTab === "attorneys" &&
+                  attorneys
+                    .filter((at) =>
+                      at.attorneys
+                        .toLowerCase()
+                        .includes(searchQuery.toLowerCase())
+                    )
+                    .map((at) => (
+                      <div key={at.attorneys} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id={at.attorneys}
+                          name="attorney"
+                          value={at.attorneys}
+                          className="mr-2"
+                          checked={selectedAttorneys.includes(at.attorneys)}
+                          onChange={() => handleAttorneyChange(at.attorneys)}
+                        />
+                        <label htmlFor={at.attorneys} className="text-sm">
+                          {at.attorneys}
+                        </label>
+                      </div>
+                    ))}
+              </div>
             </div>
-          </div>
-          )}
+   
+
           {/* Display Options */}
-          {isFilterVisible && (
-          <div className="bg-white p-6 shadow-lg rounded-md">
-            <h3 className="text-sm font-medium mb-4">Display</h3>
-            <div className="flex space-x-2">
-              <button
-                className={`border border-gray-300 px-4 py-2 rounded-md ${
-                  viewType === "grid" ? "bg-blue-500 text-white" : ""
-                }`}
-                onClick={() => handleViewChange("grid")}
-              >
-                Grid View
-              </button>
-              <button
-                className={`border border-gray-300 px-4 py-2 rounded-md ${
-                  viewType === "list" ? "bg-blue-500 text-white" : ""
-                }`}
-                onClick={() => handleViewChange("list")}
-              >
-                List View
-              </button>
+            <div className="bg-white p-6 shadow-lg rounded-md">
+              <h3 className="text-sm font-medium mb-4">Display</h3>
+              <div className="flex space-x-2">
+                <button
+                  className={`border border-gray-300 px-4 py-2 rounded-md ${
+                    viewType === "grid" ? "bg-blue-500 text-white" : ""
+                  }`}
+                  onClick={() => handleViewChange("grid")}
+                >
+                  Grid View
+                </button>
+                <button
+                  className={`border border-gray-300 px-4 py-2 rounded-md ${
+                    viewType === "list" ? "bg-blue-500 text-white" : ""
+                  }`}
+                  onClick={() => handleViewChange("list")}
+                >
+                  List View
+                </button>
+              </div>
             </div>
-          </div>
-          )}
         </aside>
       </div>
     </div>

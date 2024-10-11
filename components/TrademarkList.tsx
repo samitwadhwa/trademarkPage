@@ -75,7 +75,7 @@ const TrademarkList: React.FC<TrademarkListProps> = ({ trademarks }) => {
                     <div className="flex items-center gap-1 mt-8">
                       <img
                         src={Refresh.src}
-                        className="w-4 h-4"
+                        className="w-4 h-4 cursor-pointer"
                         alt="refresh"
                       />
                       <span className="text-xs text-black font-bold">
