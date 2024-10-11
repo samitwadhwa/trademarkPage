@@ -23,16 +23,16 @@ const TrademarkList: React.FC<TrademarkListProps> = ({ trademarks }) => {
           <table className="min-w-full divide-y divide-gray-200 font-myCustomFont">
             <thead>
               <tr>
-                <th className="px-6 py-3 text-left text-md font-medium text-black">
+                <th className="px-6 py-3 text-left text-md font-500 text-black">
                   Mark
                 </th>
-                <th className="px-6 py-3 text-left text-md font-medium text-black">
+                <th className="px-6 py-3 text-left text-md font-500 text-black">
                   Details
                 </th>
-                <th className="px-6 py-3 text-left text-md font-medium text-black">
+                <th className="px-6 py-3 text-left text-md font-500 text-black">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-md font-medium text-black">
+                <th className="px-6 py-3 text-left text-md font-500 text-black">
                   Class/Description
                 </th>
               </tr>
@@ -41,11 +41,13 @@ const TrademarkList: React.FC<TrademarkListProps> = ({ trademarks }) => {
               {trademarks.map((trademark) => (
                 <tr key={trademark.id}>
                   <td className="px-2 py-4 whitespace-nowrap">
+                    <div className="bg-white  w-24 h-24 rounded-md p-2 shadow-lg">
                     <img
                       src={imageNotAvailable.src}
-                      className="w-16 h-16"
+                      className="w-20 h-20"
                       alt="image not available"
                     />
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-black font-bold">

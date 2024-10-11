@@ -320,7 +320,6 @@ export default function Home() {
     window.location.href = mailtoLink;
   };
 
-
   useEffect(() => {
     // Ensure this only runs in the client (browser)
     const handleResize = () => {
@@ -382,25 +381,18 @@ export default function Home() {
 
       <hr className="border-4 hpx w-full border-[#EAF1FF]" />
 
-      <div className="grid grid-cols-12 gap-6 p-8">
+      <div className="grid grid-cols-12 gap-6 p-2">
         {/* Search Results Section */}
-        <main className="col-span-9 bg-white p-6 rounded-md ">
+        <main className="col-span-9 bg-white p-3 rounded-md ">
           {loading ? (
-           <div
-           className="w-12 h-12 border-4 border-white rounded-full inline-block box-border animate-spin"
-           style={{ borderBottomColor: '#4380EC' }}
-         ></div>
+            <div
+              className="w-12 h-12 border-4 border-white rounded-full inline-block box-border animate-spin"
+              style={{ borderBottomColor: "#4380EC" }}
+            ></div>
           ) : (
             <div>
-              <div className="flex lg:justify-start justify-around  w-[150%]">
-                <div>
-                  <p className="mb-4 text-[#4B5563]  font-bold">
-                    About {trademarks.length} Trademarks found for “
-                    {filters.input_query}”
-                  </p>
-                </div>
-                {/* Filter Button for Small Screens */}
-                <div className="flex justify-end gap-6 p-1 items-center mb-6 lg:hidden">
+              <div className="md:flex lg:flex lg:justify-start   w-[150%]">
+                <div className=" justify-end gap-6 p-1 items-center mb-6 lg:hidden">
                   <button
                     onClick={() => setIsFilterVisible((prev) => !prev)}
                     className="flex items-center gap-2 px-4 py-3 bg-white border border-gray-300 rounded-md"
@@ -412,16 +404,14 @@ export default function Home() {
                     />
                     <span className="inline-block text-xs w-12">Filter</span>
                   </button>
-                  {/* <button
-                  className="px-2 py-2 border border-gray-300 bg-white rounded-full"
-                  onClick={handleShare}
-                >
-                  <img src={share.src} className="w-4 h-4" alt="share" />
-                </button>
-                <button className="px-2 py-2 border border-gray-300 bg-white rounded-full">
-                  <img src={sort.src} className="w-4 h-4" alt="sort" />
-                </button> */}
                 </div>
+                <div>
+                  <p className="mb-4 text-[#4B5563]  font-bold">
+                    About {trademarks.length} Trademarks found for “
+                    {filters.input_query}”
+                  </p>
+                </div>
+                {/* Filter Button for Small Screens */}
               </div>
               <hr className="border-2 hpx w-full border-[#E7E6E6]" />
               <div></div>
@@ -434,7 +424,7 @@ export default function Home() {
                     (suggestion, index) => (
                       <button
                         key={index}
-                        className="border-2 border-[#F97316] text-[#F97316] py-2 px-4 rounded-md  bg-[#FFF8F1] hover:bg-[#FFE0B3]"
+                        className="border-2 border-[#F97316] text-[#F97316] py-1 px-2 rounded-lg  bg-[#FFF8F1] hover:bg-[#FFE0B3]"
                         onClick={() => handleSearchSuggestion(suggestion)}
                       >
                         {suggestion}
@@ -446,50 +436,59 @@ export default function Home() {
 
               {viewType === "grid" || isMobile ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {trademarks.map((trademark) => (
-                  <div
-                    key={trademark.id}
-                    className="bg-white p-4 shadow rounded-md w-full sm:max-w-xs lg:w-full mx-auto lg:mx-0  hover:shadow-lg transition-transform transform hover:scale-105 duration-300"
-                  >
-                    <div className="flex justify-between items-center">
-                      <img
-                        src={imageNotAvailable.src}
-                        className="w-16 h-16 object-contain"
-                        alt="image not available"
-                      />
-                      <div className="flex flex-col text-right">
-                        <span className="inline-flex text-md font-semibold rounded-full text-success">
-                          {trademark.status.charAt(0).toUpperCase() + trademark.status.slice(1)}
-                        </span>
-                        <span className="text-xs text-black font-bold">
-                          <span className="text-xs text-gray-500 font-medium">on</span> {trademark.date}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex justify-between items-center mt-3">
-                      <div>
-                        <div className="text-sm text-black font-bold">
-                          {trademark.mark_identification}
+                  {trademarks.map((trademark) => (
+                    <div
+                      key={trademark.id}
+                      className="bg-white p-4 shadow rounded-md w-full sm:max-w-xs lg:w-full mx-auto lg:mx-0  hover:shadow-lg transition-transform transform hover:scale-105 duration-300"
+                    >
+                      <div className="flex justify-between items-center">
+                        <img
+                          src={imageNotAvailable.src}
+                          className="w-16 h-16 object-contain"
+                          alt="image not available"
+                        />
+                        <div className="flex flex-col text-right">
+                          <span className="inline-flex text-md font-semibold rounded-full text-success">
+                            {trademark.status.charAt(0).toUpperCase() +
+                              trademark.status.slice(1)}
+                          </span>
+                          <span className="text-xs text-black font-bold">
+                            <span className="text-xs text-gray-500 font-medium">
+                              on
+                            </span>{" "}
+                            {trademark.date}
+                          </span>
                         </div>
-                        <div className="text-sm text-gray-500">{trademark.owner}</div>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <img src={Refresh.src} className="cursor-pointer w-4 h-4" alt="refresh" />
-                        <span className="text-xs text-black font-bold">{trademark.renewal_date}</span>
+                      <div className="flex justify-between items-center mt-3">
+                        <div>
+                          <div className="text-sm text-black font-bold">
+                            {trademark.mark_identification}
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            {trademark.owner}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <img
+                            src={Refresh.src}
+                            className="cursor-pointer w-4 h-4"
+                            alt="refresh"
+                          />
+                          <span className="text-xs text-black font-bold">
+                            {trademark.renewal_date}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="text-sm text-gray-500 mt-2">
+                        {trademark.description.length > 50
+                          ? trademark.description.slice(0, 50) + "..."
+                          : trademark.description}
                       </div>
                     </div>
-              
-                    <div className="text-sm text-gray-500 mt-2">
-                      {trademark.description.length > 50
-                        ? trademark.description.slice(0, 50) + "..."
-                        : trademark.description}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              
-              
-              
+                  ))}
+                </div>
               ) : (
                 <div className="hidden md:block">
                   <TrademarkList trademarks={trademarks} />
@@ -538,70 +537,72 @@ export default function Home() {
           </div>
 
           {/* Status Filter */}
-        
-            <div className="mb-6 bg-white p-6 shadow-lg rounded-md">
-              <h3 className="text-sm font-medium mb-4">Status</h3>
-              <div className="flex flex-wrap gap-2">
-                {statuses.map((status) => (
-                  <button
-                    key={status.value}
-                    className={`flex items-center gap-1 hover:bg-blue-500 hover:text-white transition-colors duration-300 border border-1 border-[#D1D1D1] text-sm px-3 py-1 rounded-full ${
-                      selectedStatus === status.value
-                        ? "bg-blue-500 text-white"
-                        : "text-black"
-                    }`}
-                    onClick={() => handleStatusChange(status.value)}
-                  >
-                    {status.label !== "All" ? (
-                      <div
-                        className={`w-2 h-2 rounded-full ${status.background}`}
-                      ></div>
-                    ) : null}
-                    {status.label}
-                  </button>
-                ))}
-              </div>
+
+          <div className="mb-6 bg-white p-6 shadow-lg rounded-md">
+            <h3 className="text-lg font-bold mb-4">Status</h3>
+            <div className="flex flex-wrap gap-2">
+              {statuses.map((status) => (
+                <button
+                  key={status.value}
+                  className={`flex items-center gap-1 hover:bg-blue-500 hover:text-white transition-colors duration-300 border border-1 border-[#D1D1D1] text-sm px-3 py-1 rounded-lg ${
+                    selectedStatus === status.value
+                      ? "bg-blue-500 text-white"
+                      : "text-black"
+                  }`}
+                  onClick={() => handleStatusChange(status.value)}
+                >
+                  {status.label !== "All" ? (
+                    <div
+                      className={`w-2 h-2 rounded ${status.background}`}
+                    ></div>
+                  ) : null}
+                  {status.label}
+                </button>
+              ))}
             </div>
-        
+          </div>
 
           {/* Dynamic Checkbox Filters Based on Active Tab */}
-      
-            <div className="mb-6 bg-white p-6 shadow-lg rounded-md">
-              <div className="flex justify-between mb-6">
-                <button
-                  onClick={() => handleTabChange("owners")}
-                  className={` rounded-md ${
-                    activeTab === "owners"
-                      ? "bg-primary text-white p-2 hover:scale-105 transform transition duration-300"
-                      : "bg-white text-black"
-                  }`}
-                >
-                  Owners
-                </button>
-                <button
-                  onClick={() => handleTabChange("lawFirms")}
-                  className={` rounded-md ${
-                    activeTab === "lawFirms"
-                      ? "bg-primary text-white p-2 hover:scale-105 transform transition duration-300"
-                      : "bg-white text-black"
-                  }`}
-                >
 
-
-                  
-                  Law Firms
-                </button>
-                <button
-                  onClick={() => handleTabChange("attorneys")}
-                  className={`rounded-md ${
-                    activeTab === "attorneys"
-                      ? "bg-primary text-white p-2 hover:scale-105 transform transition duration-300"
-                      : "bg-white text-black"
-                  }`}
-                >
-                  Attorneys
-                </button>
-              </div>
+          <div className="mb-6 bg-white p-6 shadow-lg rounded-md">
+            <div className="flex justify-between mb-6">
+              <button
+                onClick={() => handleTabChange("owners")}
+                className={` rounded-md ${
+                  activeTab === "owners"
+                    ? "text-black font-bold underline"
+                    : "bg-white text-gray-700"
+                }`}
+              >
+                Owners
+              </button>
+              <button
+                onClick={() => handleTabChange("lawFirms")}
+                className={` rounded-md ${
+                  activeTab === "lawFirms"
+                    ? "text-black font-bold underline"
+                    : "bg-white text-gray-700"
+                }`}
+              >
+                Law Firms
+              </button>
+              <button
+                onClick={() => handleTabChange("attorneys")}
+                className={`rounded-md ${
+                  activeTab === "attorneys"
+                    ? "text-black font-bold underline"
+                    : "bg-white text-gray-700"
+                }`}
+              >
+                Attorneys
+              </button>
+            </div>
+            <div className="relative">
+              <img
+                src={search.src}
+                className="w-6 h-6 absolute top-3 left-3 md:left-2 md:top-1/3 md:transform md:-translate-y-1/3"
+                alt="search icon"
+              />
               <input
                 type="text"
                 placeholder={`Search ${
@@ -609,99 +610,105 @@ export default function Home() {
                 }`}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md mb-4"
+                className="w-full px-8 py-3 border border-gray-300 text-black placeholder-black rounded-md mb-4"
               />
-              <div className="space-y-2">
-                {activeTab === "owners" &&
-                  owners
-                    .filter((own) =>
-                      own.owner
-                        .toLowerCase()
-                        .includes(searchQuery.toLowerCase())
-                    )
-                    .map((own) => (
-                      <div key={own.owner} className="flex items-center">
-                        <input
-                          type="checkbox"
-                          id={own.owner}
-                          name="owner"
-                          value={own.owner}
-                          className="mr-2"
-                          checked={selectedOwners.includes(own.owner)}
-                          onChange={() => handleOwnerChange(own.owner)}
-                        />
-                        <label htmlFor={own.owner} className="text-sm">
-                          {own.owner}
-                        </label>
-                      </div>
-                    ))}
-
-                {activeTab === "lawFirms" &&
-                  lawFirms
-                    .filter((firm) =>
-                      firm.lawFirms
-                        .toLowerCase()
-                        .includes(searchQuery.toLowerCase())
-                    )
-                    .map((firm) => (
-                      <div key={firm.lawFirms} className="flex items-center">
-                        <input
-                          type="checkbox"
-                          id={firm.lawFirms}
-                          name="lawFirm"
-                          value={firm.lawFirms}
-                          className="mr-2"
-                          checked={selectedLawFirms.includes(firm.lawFirms)}
-                          onChange={() => handleLawFirmChange(firm.lawFirms)}
-                        />
-                        <label htmlFor={firm.lawFirms} className="text-sm">
-                          {firm.lawFirms}
-                        </label>
-                      </div>
-                    ))}
-
-                {activeTab === "attorneys" &&
-                  attorneys
-                    .filter((at) =>
-                      at.attorneys
-                        .toLowerCase()
-                        .includes(searchQuery.toLowerCase())
-                    )
-                    .map((at) => (
-                      <div key={at.attorneys} className="flex items-center">
-                        <input
-                          type="checkbox"
-                          id={at.attorneys}
-                          name="attorney"
-                          value={at.attorneys}
-                          className="mr-2"
-                          checked={selectedAttorneys.includes(at.attorneys)}
-                          onChange={() => handleAttorneyChange(at.attorneys)}
-                        />
-                        <label htmlFor={at.attorneys} className="text-sm">
-                          {at.attorneys}
-                        </label>
-                      </div>
-                    ))}
-              </div>
             </div>
-   
+            <div className="space-y-2">
+              {activeTab === "owners" &&
+                owners
+                  .filter((own) =>
+                    own.owner.toLowerCase().includes(searchQuery.toLowerCase())
+                  )
+                  .map((own) => (
+                    <div key={own.owner} className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id={own.owner}
+                        name="owner"
+                        value={own.owner}
+                        className="mr-2 text-primary hover:text-primary w-5 h-5 rounded-lg"
+                        checked={selectedOwners.includes(own.owner)}
+                        onChange={() => handleOwnerChange(own.owner)}
+                      />
+                      <label
+                        htmlFor={own.owner}
+                        className={`text-md  ${
+                          selectedOwners.includes(own.owner)
+                            ? "text-primary"
+                            : "text-black"
+                        }`}
+                      >
+                        {own.owner}
+                      </label>
+                    </div>
+                  ))}
+
+              {activeTab === "lawFirms" &&
+                lawFirms
+                  .filter((firm) =>
+                    firm.lawFirms
+                      .toLowerCase()
+                      .includes(searchQuery.toLowerCase())
+                  )
+                  .map((firm) => (
+                    <div key={firm.lawFirms} className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id={firm.lawFirms}
+                        name="lawFirm"
+                        value={firm.lawFirms}
+                        className="mr-2"
+                        checked={selectedLawFirms.includes(firm.lawFirms)}
+                        onChange={() => handleLawFirmChange(firm.lawFirms)}
+                      />
+                      <label htmlFor={firm.lawFirms} className="text-sm">
+                        {firm.lawFirms}
+                      </label>
+                    </div>
+                  ))}
+
+              {activeTab === "attorneys" &&
+                attorneys
+                  .filter((at) =>
+                    at.attorneys
+                      .toLowerCase()
+                      .includes(searchQuery.toLowerCase())
+                  )
+                  .map((at) => (
+                    <div key={at.attorneys} className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id={at.attorneys}
+                        name="attorney"
+                        value={at.attorneys}
+                        className="mr-2"
+                        checked={selectedAttorneys.includes(at.attorneys)}
+                        onChange={() => handleAttorneyChange(at.attorneys)}
+                      />
+                      <label htmlFor={at.attorneys} className="text-sm">
+                        {at.attorneys}
+                      </label>
+                    </div>
+                  ))}
+            </div>
+          </div>
 
           {/* Display Options */}
+          {!isFilterVisible ? (
             <div className="bg-white p-6 shadow-lg rounded-md">
-              <h3 className="text-sm font-medium mb-4">Display</h3>
-              <div className="flex space-x-2">
+              <h3 className="text-lg font-bold mb-4">Display</h3>
+              <div className="flex space-x-2 p-2 rounded-lg bg-[#F1F1F1]">
                 <button
-                  className={`border border-gray-300 px-4 py-2 hover:scale-105 transform transition duration-300 rounded-md ${
-                    viewType === "grid" ? "bg-blue-500 text-white" : ""
+                  className={` px-4 py-2 font-medium hover:scale-105 transform transition duration-300 rounded-md ${
+                    viewType === "grid" ? "bg-white text-black" : ""
                   }`}
                   onClick={() => handleViewChange("grid")}
                 >
                   Grid View
                 </button>
                 <button
-                  className={`border border-gray-300 hover:scale-105 transform transition duration-300 px-4 py-2 rounded-md ${
-                    viewType === "list" ? "bg-blue-500 text-white" : ""
+                  className={`font-medium hover:scale-105 transform transition duration-300 px-4 py-2 rounded-md ${
+                    viewType === "list" ? "bg-white text-black" : ""
                   }`}
                   onClick={() => handleViewChange("list")}
                 >
@@ -709,6 +716,28 @@ export default function Home() {
                 </button>
               </div>
             </div>
+          ) : (
+            <div className="bg-white p-6 shadow-lg rounded-md">
+              <h3 className="text-lg font-bold mb-4">Display</h3>
+              <div className="flex space-x-2 p-2 rounded-lg bg-[#F1F1F1]">
+                <button
+                  className={` px-4 py-2 font-medium hover:scale-105 transform transition duration-300 rounded-md ${
+                    viewType === "grid" ? "bg-white text-black" : ""
+                  }`}
+                  onClick={() => handleViewChange("grid")}
+                >
+                  Grid View
+                </button>
+                <button
+                  className={`font-medium hover:scale-105 transform transition duration-300 px-4 py-2 rounded-md ${
+                    viewType === "list" ? "bg-white text-black" : ""
+                  }`}
+                >
+                  List View
+                </button>
+              </div>
+            </div>
+          )}
         </aside>
       </div>
     </div>
