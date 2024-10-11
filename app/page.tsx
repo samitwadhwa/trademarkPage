@@ -44,6 +44,7 @@ export default function Home() {
   const [viewType, setViewType] = useState<"grid" | "list">("list"); // Default to list view
   const [isFilterVisible, setIsFilterVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isMobile, setIsMobile] = useState(false);
 
   const [activeTab, setActiveTab] = useState<
     "owners" | "lawFirms" | "attorneys"
@@ -319,6 +320,25 @@ export default function Home() {
     window.location.href = mailtoLink;
   };
 
+
+  useEffect(() => {
+    // Ensure this only runs in the client (browser)
+    const handleResize = () => {
+      if (typeof window !== "undefined") {
+        setIsMobile(window.innerWidth < 768);
+      }
+    };
+
+    // Set initial value
+    handleResize();
+
+    // Update on window resize
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup on component unmount
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div className="container mx-auto bg-white  overflow-hidden">
       {/* Search Section */}
@@ -424,7 +444,7 @@ export default function Home() {
                 </div>
               </div>
 
-              {viewType === "grid" || window.innerWidth < 768 ? (
+              {viewType === "grid" || isMobile ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {trademarks.map((trademark) => (
                   <div
@@ -552,7 +572,7 @@ export default function Home() {
                   onClick={() => handleTabChange("owners")}
                   className={` rounded-md ${
                     activeTab === "owners"
-                      ? "bg-primary text-white p-2"
+                      ? "bg-primary text-white p-2 hover:scale-105 transform transition duration-300"
                       : "bg-white text-black"
                   }`}
                 >
@@ -562,7 +582,7 @@ export default function Home() {
                   onClick={() => handleTabChange("lawFirms")}
                   className={` rounded-md ${
                     activeTab === "lawFirms"
-                      ? "bg-primary text-white p-2"
+                      ? "bg-primary text-white p-2 hover:scale-105 transform transition duration-300"
                       : "bg-white text-black"
                   }`}
                 >
@@ -570,9 +590,9 @@ export default function Home() {
                 </button>
                 <button
                   onClick={() => handleTabChange("attorneys")}
-                  className={` rounded-md ${
+                  className={`rounded-md ${
                     activeTab === "attorneys"
-                      ? "bg-primary text-white p-2"
+                      ? "bg-primary text-white p-2 hover:scale-105 transform transition duration-300"
                       : "bg-white text-black"
                   }`}
                 >
@@ -669,7 +689,7 @@ export default function Home() {
               <h3 className="text-sm font-medium mb-4">Display</h3>
               <div className="flex space-x-2">
                 <button
-                  className={`border border-gray-300 px-4 py-2 rounded-md ${
+                  className={`border border-gray-300 px-4 py-2 hover:scale-105 transform transition duration-300 rounded-md ${
                     viewType === "grid" ? "bg-blue-500 text-white" : ""
                   }`}
                   onClick={() => handleViewChange("grid")}
@@ -677,7 +697,7 @@ export default function Home() {
                   Grid View
                 </button>
                 <button
-                  className={`border border-gray-300 px-4 py-2 rounded-md ${
+                  className={`border border-gray-300 hover:scale-105 transform transition duration-300 px-4 py-2 rounded-md ${
                     viewType === "list" ? "bg-blue-500 text-white" : ""
                   }`}
                   onClick={() => handleViewChange("list")}
