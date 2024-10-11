@@ -64,7 +64,10 @@ const TrademarkList: React.FC<TrademarkListProps> = ({ trademarks }) => {
                     </div>
                   </td>
                   <td className="flex flex-col items-start px-6 py-4 whitespace-nowrap">
-                    <span className="inline-flex text-md font-semibold rounded-full text-success">
+                    <span className={`inline-flex text-md font-semibold rounded-full
+                    ${trademark.status === 'abandoned' ? 'text-danger' : (trademark.status === 'registered' ? 'text-success': 'text-warning') } 
+                    
+                    `}>
                       {trademark.status.charAt(0).toUpperCase() +
                         trademark.status.slice(1)}
                     </span>

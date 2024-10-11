@@ -34,6 +34,7 @@ interface Attorneys {
 
 export default function Home() {
   const [trademarks, setTrademarks] = useState<Trademark[]>([]);
+  const [filterCopyTrademarks, setFilterTrademarks] = useState<Trademark[]>([]);
   const [owners, setOwners] = useState<Owner[]>([]);
   const [lawFirms, setLawFirms] = useState<Lawfirms[]>([]); // State for law firms
   const [attorneys, setAttorneys] = useState<Attorneys[]>([]); // State for attorneys
@@ -82,6 +83,8 @@ export default function Home() {
   const handleInputChange = (e: any) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
+
+  
 
   function formatDate(dateString: number) {
     const date = new Date(dateString * 1000);
@@ -176,7 +179,9 @@ export default function Home() {
       }));
 
       setTrademarks(parsedTrademarks);
+      setFilterTrademarks(parsedTrademarks);
     } catch (error) {
+      setTrademarks([]);
       console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
@@ -247,6 +252,7 @@ export default function Home() {
     }
   };
 
+
   const handleTabChange = (tab: "owners" | "lawFirms" | "attorneys") => {
     setActiveTab(tab); // Change the active tab
   };
@@ -268,7 +274,7 @@ export default function Home() {
     }
 
     // Start with the full list of trademarks
-    let filteredTrademarks = trademarks;
+    let filteredTrademarks = filterCopyTrademarks;
 
     // Filter by owners if any are selected
     if (selectedOwners.length > 0) {
@@ -279,8 +285,10 @@ export default function Home() {
 
     // Filter by status if one is selected
     if (selectedStatus) {
+      console.log(selectedStatus);
+      
       filteredTrademarks = filteredTrademarks.filter(
-        (trademark) => trademark.status === selectedStatus
+        (trademark) => trademark?.status === selectedStatus
       );
     }
 
@@ -337,6 +345,9 @@ export default function Home() {
     // Cleanup on component unmount
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  console.log(trademarks);
+  
 
   return (
     <div className="container mx-auto bg-white  overflow-hidden">
@@ -632,7 +643,7 @@ export default function Home() {
                       />
                       <label
                         htmlFor={own.owner}
-                        className={`text-md  ${
+                        className={`text-sm  ${
                           selectedOwners.includes(own.owner)
                             ? "text-primary"
                             : "text-black"
