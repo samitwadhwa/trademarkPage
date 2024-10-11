@@ -10,7 +10,6 @@ import search from "@/assets/images/searchIcon.png";
 import TrademarkList from "@/components/TrademarkList";
 import imageNotAvailable from "@/assets/images/ImageNotAvailable.png";
 
-
 interface Trademark {
   id: number;
   mark_identification: string;
@@ -52,6 +51,14 @@ export default function Home() {
   const handleViewChange = (type: "grid" | "list") => {
     setViewType(type);
   };
+
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+  if (!apiUrl) {
+    throw new Error(
+      "API URL is not defined. Please set NEXT_PUBLIC_API_URL in your .env file."
+    );
+  }
 
   const [filters, setFilters] = useState({
     input_query: "",
@@ -109,29 +116,28 @@ export default function Home() {
       return; // Exit the function early
     }
     try {
-      const response = await axios.post(
-        "https://vit-tm-task.api.trademarkia.app/api/v3/us",
-        {
-          input_query: filters.input_query || "",
-          input_query_type: filters.input_query_type || "",
-          sort_by: "default",
-          status: filters.status.length ? filters.status : [],
-          exact_match: false,
-          date_query: false,
-          owners: filters.owners
-            ? filters.owners.split(",").map((owner) => owner.trim())
-            : [],
-          attorneys: [],
-          law_firms: [],
-          mark_description_description: [],
-          classes: [],
-          page: 1,
-          rows: 10,
-          sort_order: filters.sort_order || "desc",
-          states: [],
-          counties: [],
-        }
-      );
+    
+
+      const response = await axios.post(apiUrl, {
+        input_query: filters.input_query || "",
+        input_query_type: filters.input_query_type || "",
+        sort_by: "default",
+        status: filters.status.length ? filters.status : [],
+        exact_match: false,
+        date_query: false,
+        owners: filters.owners
+          ? filters.owners.split(",").map((owner) => owner.trim())
+          : [],
+        attorneys: [],
+        law_firms: [],
+        mark_description_description: [],
+        classes: [],
+        page: 1,
+        rows: 10,
+        sort_order: filters.sort_order || "desc",
+        states: [],
+        counties: [],
+      });
 
       // Extract the required data
       const hits = response.data.body.hits.hits;
@@ -383,39 +389,52 @@ export default function Home() {
 
               {viewType === "grid" ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {trademarks.map((trademark) => (
-                  <div key={trademark.id} className="bg-white p-4 shadow rounded-md">
-                    <img
-                      src={imageNotAvailable.src}
-                      className="w-16 h-16"
-                      alt="image not available"
-                    />
-                    <div className="text-sm text-black font-bold">
-                      {trademark.mark_identification}
-                    </div>
-                    <div className="text-sm text-gray-500">{trademark.owner}</div>
-                    <div className="flex flex-col mt-2">
-                      <span className="inline-flex text-md font-semibold rounded-full text-success">
-                        {trademark.status.charAt(0).toUpperCase() + trademark.status.slice(1)}
-                      </span>
-                      <span className="text-xs text-black font-bold">
-                        <span className="text-xs text-gray-500 font-medium">on</span> {trademark.date}
-                      </span>
-                      <div className="flex items-center gap-1 mt-1">
-                        <img src={Refresh.src} className="w-4 h-4" alt="refresh" />
-                        <span className="text-xs text-black font-bold">
-                          {trademark.renewal_date}
+                  {trademarks.map((trademark) => (
+                    <div
+                      key={trademark.id}
+                      className="bg-white p-4 shadow rounded-md"
+                    >
+                      <img
+                        src={imageNotAvailable.src}
+                        className="w-16 h-16"
+                        alt="image not available"
+                      />
+                      <div className="text-sm text-black font-bold">
+                        {trademark.mark_identification}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        {trademark.owner}
+                      </div>
+                      <div className="flex flex-col mt-2">
+                        <span className="inline-flex text-md font-semibold rounded-full text-success">
+                          {trademark.status.charAt(0).toUpperCase() +
+                            trademark.status.slice(1)}
                         </span>
+                        <span className="text-xs text-black font-bold">
+                          <span className="text-xs text-gray-500 font-medium">
+                            on
+                          </span>{" "}
+                          {trademark.date}
+                        </span>
+                        <div className="flex items-center gap-1 mt-1">
+                          <img
+                            src={Refresh.src}
+                            className="w-4 h-4"
+                            alt="refresh"
+                          />
+                          <span className="text-xs text-black font-bold">
+                            {trademark.renewal_date}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="text-sm text-gray-500 mt-2">
+                        {trademark.description.length > 50
+                          ? trademark.description.slice(0, 50) + "..."
+                          : trademark.description}
                       </div>
                     </div>
-                    <div className="text-sm text-gray-500 mt-2">
-                      {trademark.description.length > 50
-                        ? trademark.description.slice(0, 50) + "..."
-                        : trademark.description}
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
               ) : (
                 <TrademarkList trademarks={trademarks} />
               )}
