@@ -631,7 +631,7 @@ export default function Home() {
                     own.owner.toLowerCase().includes(searchQuery.toLowerCase())
                   )
                   .map((own) => (
-                    <div key={own.owner} className="flex items-center">
+                    <div key={own.owner} className="flex items-center overflow-y-auto">
                       <input
                         type="checkbox"
                         id={own.owner}
