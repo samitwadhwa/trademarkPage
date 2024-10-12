@@ -579,7 +579,7 @@ export default function Home() {
           {/* Dynamic Checkbox Filters Based on Active Tab */}
 
           <div className="mb-6 bg-white p-6 shadow-lg rounded-md shadow-[0_1px_3px_-1px_rgba(0,0,0,0.1),0_-1px_4px_-1px_rgba(0,0,0,0.1)]">
-            <div className="flex flex-col flex-wrap gap-1 justify-between mb-6">
+            <div className="flex flex-wrap gap-1 justify-between mb-6">
               <button
                 onClick={() => handleTabChange("owners")}
                 className={` rounded-md ${
