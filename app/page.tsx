@@ -82,13 +82,12 @@ export default function Home() {
 
   const handleInputChange = (e: any) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
-    
   };
   useEffect(() => {
-    if(filters.input_query == ''){
+    if (filters.input_query == "") {
       setTrademarks([]);
     }
-  },[handleInputChange])
+  }, [handleInputChange]);
 
   function formatDate(dateString: number) {
     const date = new Date(dateString * 1000);
@@ -350,7 +349,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="container mx-auto bg-white  overflow-hidden">
+    <div className="bg-white  overflow-hidden">
       {/* Search Section */}
       <div className="flex flex-col items-start gap-8 p-8 bg-lightening md:flex-row md:justify-start overflow-hidden">
         {/* Logo/Image Section */}
@@ -446,9 +445,7 @@ export default function Home() {
               </div>
 
               {trademarks.length === 0 ? (
-                <p className="text-gray-500 font-medium">
-                  No results found
-                </p>
+                <p className="text-gray-500 font-medium">No results found</p>
               ) : viewType === "grid" || isMobile ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {trademarks.map((trademark) => (
@@ -542,18 +539,15 @@ export default function Home() {
           {/* Filter Buttons */}
 
           <div className="flex justify-center gap-6 p-1 items-center mb-6">
-            <button className="px-4 py-2 border border-gray-300 bg-white rounded-md hover:scale-105 transform transition duration-300">
-              <span className="font-[400] text-sm">Filter</span>
-            </button>
             <button
               className="px-2 py-2 border border-gray-300 bg-white rounded-full hover:scale-105 transform transition duration-300"
               onClick={handleShare}
             >
               <img src={share.src} className="w-6 h-6" alt="share" />
             </button>
-            <button className="px-2 py-2 border border-gray-300 bg-white rounded-full hover:scale-105 transform transition duration-300">
+            {/* <button className="px-2 py-2 border border-gray-300 bg-white rounded-full hover:scale-105 transform transition duration-300">
               <img src={sort.src} className="w-6 h-6" alt="sort" />
-            </button>
+            </button> */}
           </div>
 
           {/* Status Filter */}
@@ -585,7 +579,7 @@ export default function Home() {
           {/* Dynamic Checkbox Filters Based on Active Tab */}
 
           <div className="mb-6 bg-white p-6 shadow-lg rounded-md shadow-[0_1px_3px_-1px_rgba(0,0,0,0.1),0_-1px_4px_-1px_rgba(0,0,0,0.1)]">
-            <div className="flex justify-between mb-6">
+            <div className="flex flex-wrap gap-1 justify-between mb-6">
               <button
                 onClick={() => handleTabChange("owners")}
                 className={` rounded-md ${
@@ -617,6 +611,7 @@ export default function Home() {
                 Attorneys
               </button>
             </div>
+
             <div className="relative">
               <img
                 src={search.src}
