@@ -517,7 +517,7 @@ export default function Home() {
         <aside
           className={`${
             isFilterVisible ? "block" : "hidden"
-          } fixed top-0 overflow-y-auto right-0 w-full h-full lg: max-w-xs bg-white p-6 rounded-lg shadow-lg z-50 lg:block lg:static lg:w-auto lg:col-span-3 lg:mt-6 lg:p-6`}
+          } fixed top-0 overflow-y-auto right-0 w-full h-full lg:bg-transparent bg-white lg: max-w-xs p-6 rounded-lg  z-50 lg:block lg:static lg:w-auto lg:col-span-3 lg:mt-6 lg:p-6`}
         >
           {/* Close Button for Small Screens */}
           <div className="flex justify-between mb-6 lg:hidden">
@@ -547,7 +547,7 @@ export default function Home() {
 
           {/* Status Filter */}
 
-          <div className="mb-6 bg-white p-6 shadow-lg rounded-md">
+          <div className="mb-6 bg-white p-6 shadow-lg rounded-md shadow-[0_1px_3px_-1px_rgba(0,0,0,0.1),0_-1px_4px_-1px_rgba(0,0,0,0.1)]">
             <h3 className="text-lg font-[700] mb-4">Status</h3>
             <div className="flex flex-wrap gap-2">
               {statuses.map((status) => (
@@ -573,13 +573,13 @@ export default function Home() {
 
           {/* Dynamic Checkbox Filters Based on Active Tab */}
 
-          <div className="mb-6 bg-white p-6 shadow-lg rounded-md">
+          <div className="mb-6 bg-white p-6 shadow-lg rounded-md shadow-[0_1px_3px_-1px_rgba(0,0,0,0.1),0_-1px_4px_-1px_rgba(0,0,0,0.1)]">
             <div className="flex justify-between mb-6">
               <button
                 onClick={() => handleTabChange("owners")}
                 className={` rounded-md ${
                   activeTab === "owners"
-                    ? "text-black font-[700] underline"
+                    ? "text-black font-[700] underline underline-offset-4"
                     : "bg-white text-gray-700"
                 }`}
               >
@@ -589,7 +589,7 @@ export default function Home() {
                 onClick={() => handleTabChange("lawFirms")}
                 className={` rounded-md ${
                   activeTab === "lawFirms"
-                    ? "text-black font-[700] underline"
+                    ? "text-black font-[700] underline underline-offset-4"
                     : "bg-white text-gray-700"
                 }`}
               >
@@ -599,7 +599,7 @@ export default function Home() {
                 onClick={() => handleTabChange("attorneys")}
                 className={`rounded-md ${
                   activeTab === "attorneys"
-                    ? "text-black font-[700] underline"
+                    ? "text-black font-[700] underline underline-offset-4"
                     : "bg-white text-gray-700"
                 }`}
               >
@@ -707,7 +707,7 @@ export default function Home() {
 
           {/* Display Options */}
           {!isFilterVisible ? (
-            <div className="bg-white p-6 shadow-lg rounded-md">
+            <div className="bg-white p-6 shadow-lg rounded-md shadow-[0_1px_3px_-1px_rgba(0,0,0,0.1),0_-1px_4px_-1px_rgba(0,0,0,0.1)]">
               <h3 className="text-lg font-[700] mb-4">Display</h3>
               <div className="flex space-x-2 p-2 rounded-lg bg-[#F1F1F1]">
                 <button
