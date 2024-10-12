@@ -84,8 +84,6 @@ export default function Home() {
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
 
-  
-
   function formatDate(dateString: number) {
     const date = new Date(dateString * 1000);
     const day = date.getDate();
@@ -252,7 +250,6 @@ export default function Home() {
     }
   };
 
-
   const handleTabChange = (tab: "owners" | "lawFirms" | "attorneys") => {
     setActiveTab(tab); // Change the active tab
   };
@@ -286,7 +283,7 @@ export default function Home() {
     // Filter by status if one is selected
     if (selectedStatus) {
       console.log(selectedStatus);
-      
+
       filteredTrademarks = filteredTrademarks.filter(
         (trademark) => trademark?.status === selectedStatus
       );
@@ -344,10 +341,8 @@ export default function Home() {
 
     // Cleanup on component unmount
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, []); 
 
-  console.log(trademarks);
-  
 
   return (
     <div className="container mx-auto bg-white  overflow-hidden">
@@ -392,9 +387,9 @@ export default function Home() {
 
       <hr className="border-4 hpx w-full border-[#EAF1FF]" />
 
-      <div className="grid grid-cols-12 gap-6 p-2">
+      <div className="lg:grid lg:grid-cols-12 md:grid md:grid-cols-12 grid grid-cols-9  gap-6 p-2 w-full">
         {/* Search Results Section */}
-        <main className="col-span-9 bg-white p-3 rounded-md ">
+        <main className="col-span-9 bg-white p-3 rounded-md">
           {loading ? (
             <div
               className="w-12 h-12 border-4 border-white rounded-full inline-block box-border animate-spin"
@@ -402,7 +397,7 @@ export default function Home() {
             ></div>
           ) : (
             <div>
-              <div className="md:flex lg:flex lg:justify-start   w-[150%]">
+              <div className="md:flex lg:flex md:flex-col  lg:justify-start   w-[150%]">
                 <div className=" justify-end gap-6 p-1 items-center mb-6 lg:hidden">
                   <button
                     onClick={() => setIsFilterVisible((prev) => !prev)}
@@ -417,7 +412,7 @@ export default function Home() {
                   </button>
                 </div>
                 <div>
-                  <p className="mb-4 text-[#4B5563]  font-bold">
+                  <p className="mb-4 text-[#4B5563]  font-[700]">
                     About {trademarks.length} Trademarks found for “
                     {filters.input_query}”
                   </p>
@@ -427,7 +422,7 @@ export default function Home() {
               <hr className="border-2 hpx w-full border-[#E7E6E6]" />
               <div></div>
               <div className="flex gap-4 items-center">
-                <p className="mt-6 mb-6 text-[#4B5563]  font-bold">
+                <p className="mt-6 mb-6 text-[#4B5563]  font-[700]">
                   Also try searching for
                 </p>
                 <div className="flex gap-4">
@@ -459,11 +454,19 @@ export default function Home() {
                           alt="image not available"
                         />
                         <div className="flex flex-col text-right">
-                          <span className="inline-flex text-md font-semibold rounded-full text-success">
+                          <span
+                            className={`inline-flex text-md font-semibold rounded-full  ${
+                              trademark?.status === "abandoned"
+                                ? "text-danger"
+                                : trademark?.status === "registered"
+                                ? "text-success"
+                                : "text-warning"
+                            }`}
+                          >
                             {trademark.status.charAt(0).toUpperCase() +
                               trademark.status.slice(1)}
                           </span>
-                          <span className="text-xs text-black font-bold">
+                          <span className="text-xs text-black font-[700]">
                             <span className="text-xs text-gray-500 font-medium">
                               on
                             </span>{" "}
@@ -473,7 +476,7 @@ export default function Home() {
                       </div>
                       <div className="flex justify-between items-center mt-3">
                         <div>
-                          <div className="text-sm text-black font-bold">
+                          <div className="text-sm text-black font-[700]">
                             {trademark.mark_identification}
                           </div>
                           <div className="text-sm text-gray-500">
@@ -486,7 +489,7 @@ export default function Home() {
                             className="cursor-pointer w-4 h-4"
                             alt="refresh"
                           />
-                          <span className="text-xs text-black font-bold">
+                          <span className="text-xs text-black font-[700]">
                             {trademark.renewal_date}
                           </span>
                         </div>
@@ -528,14 +531,9 @@ export default function Home() {
           </div>
 
           {/* Filter Buttons */}
+         
           <div className="flex justify-center gap-6 p-1 items-center mb-6">
-            {/* <button
-              // onClick={() => setIsFilterVisible((prev) => !prev)}
-              className="flex items-center gap-2 px-4 py-3 bg-white border border-gray-300 rounded-md"
-            >
-              <img src={filter_alt.src} className="w-4 h-4" alt="filter" />
-              <span className="inline-block text-xs">Filter</span>
-            </button> */}
+           
             <button
               className="px-2 py-2 border border-gray-300 bg-white rounded-full hover:scale-105 transform transition duration-300"
               onClick={handleShare}
@@ -545,12 +543,12 @@ export default function Home() {
             <button className="px-2 py-2 border border-gray-300 bg-white rounded-full hover:scale-105 transform transition duration-300">
               <img src={sort.src} className="w-6 h-6" alt="sort" />
             </button>
-          </div>
+          </div> 
 
           {/* Status Filter */}
 
           <div className="mb-6 bg-white p-6 shadow-lg rounded-md">
-            <h3 className="text-lg font-bold mb-4">Status</h3>
+            <h3 className="text-lg font-[700] mb-4">Status</h3>
             <div className="flex flex-wrap gap-2">
               {statuses.map((status) => (
                 <button
@@ -581,7 +579,7 @@ export default function Home() {
                 onClick={() => handleTabChange("owners")}
                 className={` rounded-md ${
                   activeTab === "owners"
-                    ? "text-black font-bold underline"
+                    ? "text-black font-[700] underline"
                     : "bg-white text-gray-700"
                 }`}
               >
@@ -591,7 +589,7 @@ export default function Home() {
                 onClick={() => handleTabChange("lawFirms")}
                 className={` rounded-md ${
                   activeTab === "lawFirms"
-                    ? "text-black font-bold underline"
+                    ? "text-black font-[700] underline"
                     : "bg-white text-gray-700"
                 }`}
               >
@@ -601,7 +599,7 @@ export default function Home() {
                 onClick={() => handleTabChange("attorneys")}
                 className={`rounded-md ${
                   activeTab === "attorneys"
-                    ? "text-black font-bold underline"
+                    ? "text-black font-[700] underline"
                     : "bg-white text-gray-700"
                 }`}
               >
@@ -631,7 +629,10 @@ export default function Home() {
                     own.owner.toLowerCase().includes(searchQuery.toLowerCase())
                   )
                   .map((own) => (
-                    <div key={own.owner} className="flex items-center overflow-y-auto">
+                    <div
+                      key={own.owner}
+                      className="flex items-center overflow-y-auto"
+                    >
                       <input
                         type="checkbox"
                         id={own.owner}
@@ -668,7 +669,7 @@ export default function Home() {
                         id={firm.lawFirms}
                         name="lawFirm"
                         value={firm.lawFirms}
-                        className="mr-2"
+                        className="mr-2 text-primary hover:text-primary w-5 h-5 rounded-lg"
                         checked={selectedLawFirms.includes(firm.lawFirms)}
                         onChange={() => handleLawFirmChange(firm.lawFirms)}
                       />
@@ -692,7 +693,7 @@ export default function Home() {
                         id={at.attorneys}
                         name="attorney"
                         value={at.attorneys}
-                        className="mr-2"
+                        className="mr-2 text-primary hover:text-primary w-5 h-5 rounded-lg"
                         checked={selectedAttorneys.includes(at.attorneys)}
                         onChange={() => handleAttorneyChange(at.attorneys)}
                       />
@@ -707,7 +708,7 @@ export default function Home() {
           {/* Display Options */}
           {!isFilterVisible ? (
             <div className="bg-white p-6 shadow-lg rounded-md">
-              <h3 className="text-lg font-bold mb-4">Display</h3>
+              <h3 className="text-lg font-[700] mb-4">Display</h3>
               <div className="flex space-x-2 p-2 rounded-lg bg-[#F1F1F1]">
                 <button
                   className={` px-4 py-2 font-medium hover:scale-105 transform transition duration-300 rounded-md ${
@@ -729,7 +730,7 @@ export default function Home() {
             </div>
           ) : (
             <div className="bg-white p-6 shadow-lg rounded-md">
-              <h3 className="text-lg font-bold mb-4">Display</h3>
+              <h3 className="text-lg font-[700] mb-4">Display</h3>
               <div className="flex space-x-2 p-2 rounded-lg bg-[#F1F1F1]">
                 <button
                   className={` px-4 py-2 font-medium hover:scale-105 transform transition duration-300 rounded-md ${
