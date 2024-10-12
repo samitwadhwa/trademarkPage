@@ -370,7 +370,7 @@ export default function Home() {
             <input
               type="text"
               name="input_query"
-              placeholder="Search Trademark Here eg. Nike"
+              placeholder="Search Trademark Here eg. Nids"
               value={filters.input_query}
               onChange={handleInputChange}
               className="pl-10 py-3 border  border-gray-300 rounded-lg w-full md:w-96 transition duration-300 ease-in-out focus:ring focus:ring-blue-500"
