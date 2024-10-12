@@ -82,7 +82,13 @@ export default function Home() {
 
   const handleInputChange = (e: any) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
+    
   };
+  useEffect(() => {
+    if(filters.input_query == ''){
+      setTrademarks([]);
+    }
+  },[handleInputChange])
 
   function formatDate(dateString: number) {
     const date = new Date(dateString * 1000);
@@ -341,8 +347,7 @@ export default function Home() {
 
     // Cleanup on component unmount
     return () => window.removeEventListener("resize", handleResize);
-  }, []); 
-
+  }, []);
 
   return (
     <div className="container mx-auto bg-white  overflow-hidden">
@@ -440,12 +445,16 @@ export default function Home() {
                 </div>
               </div>
 
-              {viewType === "grid" || isMobile ? (
+              {trademarks.length === 0 ? (
+                <p className="text-gray-500 font-medium">
+                  No results found
+                </p>
+              ) : viewType === "grid" || isMobile ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {trademarks.map((trademark) => (
                     <div
                       key={trademark.id}
-                      className="bg-white p-4 shadow rounded-md w-full sm:max-w-xs lg:w-full mx-auto lg:mx-0  hover:shadow-lg transition-transform transform hover:scale-105 duration-300"
+                      className="bg-white p-4 shadow rounded-md w-full sm:max-w-xs lg:w-full mx-auto lg:mx-0 hover:shadow-lg transition-transform transform hover:scale-105 duration-300"
                     >
                       <div className="flex justify-between items-center">
                         <img
@@ -455,7 +464,7 @@ export default function Home() {
                         />
                         <div className="flex flex-col text-right">
                           <span
-                            className={`inline-flex text-md font-semibold rounded-full  ${
+                            className={`inline-flex text-md font-semibold rounded-full ${
                               trademark?.status === "abandoned"
                                 ? "text-danger"
                                 : trademark?.status === "registered"
@@ -531,9 +540,11 @@ export default function Home() {
           </div>
 
           {/* Filter Buttons */}
-         
+
           <div className="flex justify-center gap-6 p-1 items-center mb-6">
-           
+            <button className="px-4 py-2 border border-gray-300 bg-white rounded-md hover:scale-105 transform transition duration-300">
+              <span className="font-[400] text-sm">Filter</span>
+            </button>
             <button
               className="px-2 py-2 border border-gray-300 bg-white rounded-full hover:scale-105 transform transition duration-300"
               onClick={handleShare}
@@ -543,7 +554,7 @@ export default function Home() {
             <button className="px-2 py-2 border border-gray-300 bg-white rounded-full hover:scale-105 transform transition duration-300">
               <img src={sort.src} className="w-6 h-6" alt="sort" />
             </button>
-          </div> 
+          </div>
 
           {/* Status Filter */}
 
